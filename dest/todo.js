@@ -9,18 +9,15 @@ export class TodoList {
     saveToLocalStorage() {
         localStorage.setItem("todoList", JSON.stringify(this.todos));
     }
-    isExpired(expDate) {
-        const expirationPeriod = 0.015 * 60 * 60 * 1000;
-        const currentTime = Date.now();
-        return currentTime - expDate > expirationPeriod;
-    }
     renderTodoList() {
         this.todoList.innerHTML = "";
         this.todos.forEach((todo) => {
             if (!this.isExpired(todo.expDate)) {
                 const text = todo.text;
+                const id = todo.id;
                 const todoItem = document.createElement("li");
                 todoItem.classList.add('todo__item');
+                todoItem.setAttribute("data-id", id);
                 const itemInput = document.createElement("input");
                 itemInput.classList.add('todo__text');
                 itemInput.value = text;
@@ -41,18 +38,21 @@ export class TodoList {
                 itemDiv.appendChild(itemBtnDelete);
                 itemBtnDelete.appendChild(itemImgDelete);
                 itemBtnEdit.appendChild(itemImgEdit);
-                this.editElement(itemBtnEdit, itemInput);
+                this.editElement(itemBtnEdit, itemInput, itemImgEdit, todoItem);
                 this.deleteElement(itemBtnDelete, todoItem);
             }
-            else {
-                this.todos = [];
-                localStorage.setItem("todoList", JSON.stringify(this.todos));
+        });
+        this.todos.forEach((todo) => {
+            if (this.isExpired(todo.expDate)) {
+                let index = this.todos.indexOf(todo);
+                this.todos.splice(index, 1);
+                this.saveToLocalStorage();
             }
         });
     }
-    editElement(button, input) {
+    editElement(button, input, img, li) {
         let switchEditBtnValue = 0;
-        const todo = this.todos.find((item) => item.text === input.value);
+        const todo = this.todos.find((item) => item.id === li.getAttribute("data-id"));
         if (todo) {
             const index = this.todos.indexOf(todo);
             button.addEventListener("click", (e) => {
@@ -60,10 +60,19 @@ export class TodoList {
                 if (switchEditBtnValue === 0) {
                     input.removeAttribute("readonly");
                     switchEditBtnValue = 1;
+                    img.src = "../img/check.png";
+                    input.focus();
                 }
                 else if (switchEditBtnValue === 1) {
                     input.setAttribute("readonly", "readonly");
                     switchEditBtnValue = 0;
+                    img.src = "../img/edit.png";
+                }
+                if (input.value.trim() === "") {
+                    this.todos.splice(index, 1);
+                    this.saveToLocalStorage();
+                    this.renderTodoList();
+                    return;
                 }
                 this.todos[index].text = input.value;
                 this.saveToLocalStorage();
@@ -73,7 +82,7 @@ export class TodoList {
     deleteElement(button, li) {
         button.addEventListener("click", (e) => {
             this.todos.forEach((task) => {
-                if (task.text === li.querySelector("input").value) {
+                if (task.id === li.getAttribute("data-id")) {
                     let index = this.todos.indexOf(task);
                     this.todos.splice(index, 1);
                     this.saveToLocalStorage();
@@ -81,5 +90,10 @@ export class TodoList {
                 }
             });
         });
+    }
+    isExpired(expDate) {
+        const expirationPeriod = 6 * 60 * 60 * 1000;
+        const currentTime = Date.now();
+        return currentTime - expDate > expirationPeriod;
     }
 }

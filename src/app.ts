@@ -7,11 +7,12 @@ todoList.renderTodoList();
 todoList.addItemBtn.addEventListener("click", (e: Event) => {
     e.preventDefault();
     
-    if (todoList.addItemText.value === '') {return};
+    if (todoList.addItemText.value.trim() === '') {return};
 
     const newTodo = {
         text: todoList.addItemText.value,
         expDate: Date.now(),
+        id: Date.now().toString(),
     };
 
     todoList.todos.push(newTodo);
