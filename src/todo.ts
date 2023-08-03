@@ -124,7 +124,7 @@ export class TodoList {
     }
 
     private isExpired(expDate: number): boolean {
-        const expirationPeriod = 0.003 * 60 * 60 * 1000;
+        const expirationPeriod = 6 * 60 * 60 * 1000;
         const currentTime = Date.now();
         return currentTime - expDate > expirationPeriod;
     }
