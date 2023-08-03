@@ -13,13 +13,11 @@ todoList.addItemBtn.addEventListener("click", (e) => {
         id: Date.now().toString(),
     };
     todoList.todos.push(newTodo);
-    todoList.saveToLocalStorage();
-    todoList.renderTodoList();
+    todoList.callFunctions();
     todoList.addItemText.value = "";
 });
 todoList.clearAll.addEventListener("click", (e) => {
     e.preventDefault();
     todoList.todos = [];
-    todoList.saveToLocalStorage();
-    todoList.renderTodoList();
+    todoList.callFunctions();
 });

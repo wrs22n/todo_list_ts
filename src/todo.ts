@@ -77,6 +77,11 @@ export class TodoList {
         })
     }
 
+    public callFunctions() {
+        this.saveToLocalStorage();
+        this.renderTodoList();
+    }
+
     private editElement(button: HTMLButtonElement, input: HTMLInputElement, img: HTMLImageElement, li: HTMLLIElement) {
         let switchEditBtnValue = 0;
         const todo = this.todos.find((item) => item.id === li.getAttribute("data-id"));
@@ -97,8 +102,7 @@ export class TodoList {
             }
             if (input.value.trim() === "") {
                 this.todos.splice(index,1);
-                this.saveToLocalStorage();
-                this.renderTodoList();
+                this.callFunctions();
                 return;
             } 
             this.todos[index].text = input.value;
@@ -113,15 +117,14 @@ export class TodoList {
                 if (task.id === li.getAttribute("data-id")) {
                     let index = this.todos.indexOf(task);
                     this.todos.splice(index,1);
-                    this.saveToLocalStorage();
-                    this.renderTodoList();
+                    this.callFunctions();
                 }
             })
         })
     }
 
     private isExpired(expDate: number): boolean {
-        const expirationPeriod = 6 * 60 * 60 * 1000;
+        const expirationPeriod = 0.003 * 60 * 60 * 1000;
         const currentTime = Date.now();
         return currentTime - expDate > expirationPeriod;
     }
