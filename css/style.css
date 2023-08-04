@@ -1,4 +1,5 @@
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
   background-color: rgb(223, 232, 240);
@@ -6,7 +7,8 @@ html, body {
   font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
-ul, li {
+ul,
+li {
   list-style: none;
   margin: 0;
   padding: 0;
@@ -111,4 +113,4 @@ ul, li {
   font-size: 22px;
   cursor: pointer;
   color: rgb(177, 72, 72);
-}/*# sourceMappingURL=style.css.map */
+} /*# sourceMappingURL=style.css.map */
