@@ -65,11 +65,7 @@ export class TodoList {
     
                 this.editElement(itemBtnEdit, itemInput, itemImgEdit, todoItem);
                 this.deleteElement(itemBtnDelete, todoItem);
-            } 
-        })
-
-        this.todos.forEach((todo) => {
-            if (this.isExpired(todo.expDate)) {
+            } else {
                 let index = this.todos.indexOf(todo);
                 this.todos.splice(index,1);
                 this.saveToLocalStorage();
@@ -77,7 +73,7 @@ export class TodoList {
         })
     }
 
-    public callFunctions() {
+    public refreshList() {
         this.saveToLocalStorage();
         this.renderTodoList();
     }
@@ -87,27 +83,27 @@ export class TodoList {
         const todo = this.todos.find((item) => item.id === li.getAttribute("data-id"));
         
         if (todo) {
-          const index = this.todos.indexOf(todo);
-          button.addEventListener("click", (e) => {
-            e.preventDefault();
-            if (switchEditBtnValue === 0) {
-              input.removeAttribute("readonly");
-              switchEditBtnValue = 1;
-              img.src = "../img/check.png";
-              input.focus();
-            } else if (switchEditBtnValue === 1) {
-              input.setAttribute("readonly", "readonly");
-              switchEditBtnValue = 0;
-              img.src = "../img/edit.png";
-            }
-            if (input.value.trim() === "") {
-                this.todos.splice(index,1);
-                this.callFunctions();
-                return;
-            } 
-            this.todos[index].text = input.value;
-            this.saveToLocalStorage();
-          });
+            const index = this.todos.indexOf(todo);
+            button.addEventListener("click", (e) => {
+                e.preventDefault();
+                if (switchEditBtnValue === 0) {
+                    input.removeAttribute("readonly");
+                    switchEditBtnValue = 1;
+                    img.src = "../img/check.png";
+                    input.focus();
+                } else if (switchEditBtnValue === 1) {
+                    input.setAttribute("readonly", "readonly");
+                    switchEditBtnValue = 0;
+                    img.src = "../img/edit.png";
+                }
+                if (input.value.trim() === "") {
+                    this.todos.splice(index,1);
+                    this.refreshList();
+                    return;
+                } 
+                this.todos[index].text = input.value;
+                this.saveToLocalStorage();
+            });
         }
     }
     
@@ -117,7 +113,7 @@ export class TodoList {
                 if (task.id === li.getAttribute("data-id")) {
                     let index = this.todos.indexOf(task);
                     this.todos.splice(index,1);
-                    this.callFunctions();
+                    this.refreshList();
                 }
             })
         })

@@ -1,28 +1,30 @@
-import { TodoList } from './todo.js';
+import { TodoList } from "./todo.js";
 
 const todoList = new TodoList();
 
 todoList.renderTodoList();
 
 todoList.addItemBtn.addEventListener("click", (e: Event) => {
-    e.preventDefault();
-    
-    if (todoList.addItemText.value.trim() === '') {return};
+  e.preventDefault();
 
-    const newTodo = {
-        text: todoList.addItemText.value,
-        expDate: Date.now(),
-        id: Date.now().toString(),
-    };
+  if (todoList.addItemText.value.trim() === "") {
+    return;
+  }
 
-    todoList.todos.push(newTodo);
-    todoList.callFunctions();
+  const newTodo = {
+    text: todoList.addItemText.value,
+    expDate: Date.now(),
+    id: Date.now().toString(),
+  };
 
-    todoList.addItemText.value = "";
+  todoList.todos.push(newTodo);
+  todoList.refreshList();
+
+  todoList.addItemText.value = "";
 });
 
 todoList.clearAll.addEventListener("click", (e) => {
-    e.preventDefault();
-    todoList.todos = []; 
-    todoList.callFunctions();
-})
+  e.preventDefault();
+  todoList.todos = [];
+  todoList.refreshList();
+});

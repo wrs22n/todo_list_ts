@@ -50,7 +50,7 @@ export class TodoList {
             }
         });
     }
-    callFunctions() {
+    refreshList() {
         this.saveToLocalStorage();
         this.renderTodoList();
     }
@@ -74,7 +74,7 @@ export class TodoList {
                 }
                 if (input.value.trim() === "") {
                     this.todos.splice(index, 1);
-                    this.callFunctions();
+                    this.refreshList();
                     return;
                 }
                 this.todos[index].text = input.value;
@@ -88,7 +88,7 @@ export class TodoList {
                 if (task.id === li.getAttribute("data-id")) {
                     let index = this.todos.indexOf(task);
                     this.todos.splice(index, 1);
-                    this.callFunctions();
+                    this.refreshList();
                 }
             });
         });
